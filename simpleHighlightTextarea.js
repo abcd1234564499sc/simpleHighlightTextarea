@@ -29,6 +29,10 @@ function textareaColorizeFunc(textareaObj,highlightChars) {
     let tmpChar = text[i];
     for(let highlightChar in highlightChars){
         if(tmpChar == highlightChar && i<text.length-1){
+            if(i==0){
+                // 当输入框的第一个字符即为标识时为一种特殊情况，此时index应从-1开始计数
+                nodeIndex -= 1;
+            }
             let ifAddFlag = false;
             // 出现标识，判断是否为结束标识
             if(!ifInNode && text.substring(i+1).includes(highlightChar)){
@@ -62,14 +66,27 @@ function textareaColorizeFunc(textareaObj,highlightChars) {
   // 尝试恢复光标位置
   let newRange = document.createRange();
   let rangeInNode = textareaObj.childNodes[nodeIndex];
-  if(rangeInNode.nodeType==1){
-    rangeInNode = rangeInNode.firstChild;
-  }
-  newRange.setStart(rangeInNode, nodeOffset);
-  newRange.setEnd(rangeInNode, nodeOffset);
 
-  sel.removeAllRanges();
-  sel.addRange(newRange);
+  try{
+    if(typeof rangeInNode === "undefined"){
+      // 初始复制包含两个以上标记的字符串会导致获取索引超出子节点长度，对此直接将目标节点重置为第一个节点
+      rangeInNode = textareaObj.firstChild;
+    }
+    if(rangeInNode.nodeType==1){
+      rangeInNode = rangeInNode.firstChild;
+    }else{
+      rangeInNode = rangeInNode;
+    }
+    newRange.setStart(rangeInNode, nodeOffset);
+    newRange.setEnd(rangeInNode, nodeOffset);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+  }catch(error){
+
+    // 当输入框被完全删除时会报错，此时使输入框获取焦点
+    $(textareaObj).focus();
+  }
+
 }
 
 // 指定关键字符，两两配对，配对中间的字符修改颜色
