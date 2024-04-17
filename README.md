@@ -1,0 +1,2 @@
+# simpleHighlightTextarea
+简单的基于JQuery的用于高亮关键词的textarea javascript库，解决了光标问题
