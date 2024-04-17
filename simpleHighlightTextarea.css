@@ -1,0 +1,17 @@
+.highlight_textarea {
+    height: 100px;
+    border: 1px solid #ccc;
+
+    /*给div添加可以调整控制盒子大小的属性*/
+    resize: both;
+    overflow: auto;
+    outline: none;
+}
+ /* 输入框为空时显示 placeholder */
+ .highlight_textarea:empty:before {
+    content: attr(placeholder);
+ }
+ /* 输入框获取焦点时移除 placeholder */
+ .highlight_textarea:focus:before {
+    content: none;
+}

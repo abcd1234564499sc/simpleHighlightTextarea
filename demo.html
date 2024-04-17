@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>高亮关键词textarea模板</title>
+    
+    <link href="simpleHighlightTextarea.css"
+          rel="stylesheet">
+</head>
+<body>
+<h3>下方输入框输入的字符中，∮ 包围的字符会显示为橘色，% 包围的字符会显示为绿色</h3>
+<div contenteditable="true" class="highlight_textarea" placeholder="请输入文本内容" highlightChars='{"∮":"#FFA500","%":"#00FF00"}'></div>
+<script src="jquery.min.js"></script>
+<script src="simpleHighlightTextarea.js"></script>
+<script>
+$(".highlight_textarea").on('input', function() {
+    let highlightChars = $.parseJSON($(this).attr("highlightChars"));
+    textareaColorizeFunc(this,highlightChars);
+});
+</script>
+</body>
+</html>
